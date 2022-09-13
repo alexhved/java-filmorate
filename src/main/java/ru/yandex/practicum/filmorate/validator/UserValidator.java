@@ -1,26 +1,24 @@
 package ru.yandex.practicum.filmorate.validator;
 
+import ru.yandex.practicum.filmorate.controller.UserController;
+import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
 
 public class UserValidator implements Validator<User> {
     @Override
-    public boolean validate(User user) {
-        if (user.getLogin().isEmpty() || user.getEmail().isEmpty() || user.getBirthday().isEqual(LocalDate.MAX)) {
-            return false;
-        }
-
+    public void validate(User user) throws ValidateException {
         if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {
-            return false;
+            throw new ValidateException("Почта должна содержать символ \"@\" и не должна быть пустой");
         }
 
         if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            return false;
+            throw new ValidateException("Логин не может быть пустым или содержать пробел");
         }
 
         if (user.getBirthday().isAfter(LocalDate.now())) {
-            return false;
+            throw new ValidateException("День рождения не может быть в будущем");
         }
 
         if (user.getName().isEmpty()) {
@@ -28,9 +26,7 @@ public class UserValidator implements Validator<User> {
         }
 
         if (user.getId() == 0) {
-            user.generateId();
+            user.setId(UserController.generateId());
         }
-
-        return true;
     }
 }

@@ -2,14 +2,15 @@ package ru.yandex.practicum.filmorate.validator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.yandex.practicum.filmorate.controller.FilmController;
+import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FilmValidatorTest {
     Validator<Film> validator = new FilmValidator();
@@ -18,7 +19,7 @@ class FilmValidatorTest {
     @BeforeEach
     public void setUp() {
         film = new Film();
-        film.setId(1);
+        film.setId(FilmController.generateId());
         film.setName("film name");
         film.setDescription("description");
         film.setDuration(90);
@@ -27,13 +28,14 @@ class FilmValidatorTest {
 
     @Test
     void validate() {
-        assertTrue(validator.validate(film));
+        assertDoesNotThrow(() -> validator.validate(film));
     }
 
     @Test
     void validateWithoutName() {
         film.setName("");
-        assertFalse(validator.validate(film));
+        ValidateException exception = assertThrows(ValidateException.class, () -> validator.validate(film));
+        assertEquals("Имя не должно быть пустым", exception.getMessage());
     }
 
     @Test
@@ -43,7 +45,9 @@ class FilmValidatorTest {
             s[i] = "a";
         }
         film.setDescription(Arrays.toString(s));
-        assertFalse(validator.validate(film));
+        ValidateException exception = assertThrows(ValidateException.class, () -> validator.validate(film));
+        assertEquals("Описание не должно быть пустым," +
+                " максимальная длина описания не должна превышать 200 символов", exception.getMessage());
     }
 
     @Test
@@ -51,25 +55,14 @@ class FilmValidatorTest {
         LocalDate minReleaseDate = LocalDate.of(1895, Month.DECEMBER, 28);
 
         film.setReleaseDate(minReleaseDate.minusDays(1));
-        assertFalse(validator.validate(film));
-
-        film.setReleaseDate(minReleaseDate.plusDays(1));
-        assertTrue(validator.validate(film));
+        ValidateException exception = assertThrows(ValidateException.class, () -> validator.validate(film));
+        assertEquals("Дата релиза не может быть ранее 28.12.1895 и не может быть пустым", exception.getMessage());
     }
 
     @Test
     void validateDuration() {
         film.setDuration(-1);
-        assertFalse(validator.validate(film));
-    }
-
-    @Test
-    void validateEmptyfields() {
-        film.setDuration(0);
-        film.setId(0);
-        film.setReleaseDate(LocalDate.MIN);
-        film.setName("");
-        film.setDescription("");
-        assertFalse(validator.validate(film));
+        ValidateException exception = assertThrows(ValidateException.class, () -> validator.validate(film));
+        assertEquals("Продолжительность фильма должна быть больше 0", exception.getMessage());
     }
 }

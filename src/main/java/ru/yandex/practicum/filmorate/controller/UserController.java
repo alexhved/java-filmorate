@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.validator.UserValidator;
@@ -18,6 +19,11 @@ public class UserController {
     private final UserValidator validator = new UserValidator();
     private final Map<Long, User> userMap = new HashMap<>();
 
+    private static long idGenerator = 0;
+    public static long generateId() {
+        return ++idGenerator;
+    }
+
     @GetMapping
     public List<User> allUsers() {
         return new ArrayList<>(userMap.values());
@@ -25,23 +31,20 @@ public class UserController {
 
     @PostMapping
     public User create(@RequestBody User user) throws ValidateException {
-        if (validator.validate(user)) {
+        validator.validate(user);
             userMap.put(user.getId(), user);
-            log.info("Добавлен пользователь {}", user.getName());
-        } else {
-            throw new ValidateException("User is not valid");
-        }
+            log.info("User added: {}", user.getName());
         return user;
     }
 
     @PutMapping
-    public User update(@RequestBody User user) throws ValidateException {
-        if (userMap.containsKey(user.getId()) && validator.validate(user)) {
-            userMap.put(user.getId(), user);
-            log.info("Обновлён пользователь {}", user.getName());
-        } else {
-            throw  new ValidateException("User is not valid");
+    public User update(@RequestBody User user) throws ValidateException, NotFoundException {
+        validator.validate(user);
+        if (!userMap.containsKey(user.getId())) {
+            throw new NotFoundException("User not found");
         }
+            userMap.put(user.getId(), user);
+            log.info("User updated: {}", user.getName());
         return user;
     }
 }

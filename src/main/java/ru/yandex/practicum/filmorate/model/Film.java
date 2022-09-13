@@ -6,23 +6,9 @@ import java.time.LocalDate;
 
 @Data
 public class Film {
-    private long id;
-    private String name;
-    private String description;
-    private LocalDate releaseDate;
-    private int duration;
-
-    {
-        id = 0;
-        name = "";
-        description = "";
-        releaseDate = LocalDate.MAX;
-        duration = 0;
-    }
-
-    public Film() {}
-    private static long idGenerator = 0;
-    public void generateId() {
-        id = ++idGenerator;
-    }
+    private long id = 0;
+    private String name = "";
+    private String description = "";
+    private LocalDate releaseDate = LocalDate.MIN;
+    private int duration = 0;
 }

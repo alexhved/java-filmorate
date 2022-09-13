@@ -1,5 +1,7 @@
 package ru.yandex.practicum.filmorate.validator;
 
+import ru.yandex.practicum.filmorate.controller.FilmController;
+import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
@@ -7,32 +9,26 @@ import java.time.Month;
 
 public class FilmValidator implements Validator<Film> {
     @Override
-    public boolean validate(Film film) {
-        if (film.getName().isEmpty() || film.getDescription().isEmpty()
-                || film.getReleaseDate().isEqual(LocalDate.MAX) || film.getDuration() == 0) {
-            return false;
-        }
-
+    public void validate(Film film) throws ValidateException {
         if (film.getName().isBlank()) {
-            return false;
+            throw new ValidateException("Имя не должно быть пустым");
         }
 
-        if (film.getDescription().chars().count() > 200) {
-            return false;
+        if (film.getDescription().chars().count() > 200 || film.getDescription().isEmpty()) {
+            throw new ValidateException("Описание не должно быть пустым," +
+                    " максимальная длина описания не должна превышать 200 символов");
         }
 
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, Month.DECEMBER, 28))) {
-            return false;
+            throw new ValidateException("Дата релиза не может быть ранее 28.12.1895 и не может быть пустым");
         }
 
-        if (film.getDuration() < 0) {
-            return false;
+        if (film.getDuration() <= 0) {
+            throw new ValidateException("Продолжительность фильма должна быть больше 0");
         }
 
         if (film.getId() == 0) {
-            film.generateId();
+            film.setId(FilmController.generateId());
         }
-
-        return true;
     }
 }

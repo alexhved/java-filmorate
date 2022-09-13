@@ -3,6 +3,8 @@ package ru.yandex.practicum.filmorate.validator;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.yandex.practicum.filmorate.controller.UserController;
+import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
@@ -15,7 +17,7 @@ class UserValidatorTest {
     @BeforeEach
     void setUp() {
         user = new User();
-        user.generateId();
+        UserController.generateId();
         user.setName("name nick");
         user.setLogin("login");
         user.setEmail("email@.con");
@@ -24,39 +26,38 @@ class UserValidatorTest {
 
     @Test
     void validate() {
-        assertTrue(validator.validate(user));
+        assertDoesNotThrow(() -> validator.validate(user));
 
         user.setName("");
-        assertTrue(validator.validate(user));
+        assertDoesNotThrow(() -> validator.validate(user));
     }
 
     @Test
     void validateMail() {
         user.setEmail("");
-        assertFalse(validator.validate(user));
+        ValidateException ex = assertThrows(ValidateException.class, () -> validator.validate(user));
+        assertEquals("Почта должна содержать символ \"@\" и не должна быть пустой", ex.getMessage());
 
         user.setEmail("email.ru");
-        assertFalse(validator.validate(user));
+        ValidateException ex2 = assertThrows(ValidateException.class, () -> validator.validate(user));
+        assertEquals("Почта должна содержать символ \"@\" и не должна быть пустой", ex2.getMessage());
     }
 
     @Test
     void validateLogin() {
         user.setLogin("");
-        assertFalse(validator.validate(user));
+        ValidateException ex = assertThrows(ValidateException.class, () -> validator.validate(user));
+        assertEquals("Логин не может быть пустым или содержать пробел", ex.getMessage());
 
         user.setLogin("log in");
-        assertFalse(validator.validate(user));
+        ValidateException ex2 = assertThrows(ValidateException.class, () -> validator.validate(user));
+        assertEquals("Логин не может быть пустым или содержать пробел", ex2.getMessage());
     }
 
     @Test
     void validateBirthday() {
         user.setBirthday(LocalDate.MAX);
-        assertFalse(validator.validate(user));
-    }
-
-    @Test
-    void validateEmpty() {
-        User emptyUser = new User();
-        assertFalse(validator.validate(emptyUser));
+        ValidateException ex = assertThrows(ValidateException.class, () -> validator.validate(user));
+        assertEquals("День рождения не может быть в будущем", ex.getMessage());
     }
 }
