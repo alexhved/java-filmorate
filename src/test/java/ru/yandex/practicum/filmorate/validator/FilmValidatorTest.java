@@ -8,7 +8,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,11 +39,8 @@ class FilmValidatorTest {
 
     @Test
     void validateDescription() {
-        String[] s = new String[201];
-        for (int i = 0; i < 201; i++) {
-            s[i] = "a";
-        }
-        film.setDescription(Arrays.toString(s));
+        String s = "a".repeat(201);
+        film.setDescription(s);
         ValidateException exception = assertThrows(ValidateException.class, () -> validator.validate(film));
         assertEquals("Описание не должно быть пустым," +
                 " максимальная длина описания не должна превышать 200 символов", exception.getMessage());
