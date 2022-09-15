@@ -10,16 +10,16 @@ import java.time.Month;
 public class FilmValidator implements Validator<Film> {
     @Override
     public void validate(Film film) throws ValidateException {
-        if (film.getName().isBlank()) {
+        if (film.getName()==null || film.getName().isBlank()) {
             throw new ValidateException("Имя не должно быть пустым");
         }
 
-        if (film.getDescription().chars().count() > 200 || film.getDescription().isEmpty()) {
+        if (film.getDescription()== null || film.getDescription().chars().count() > 200 || film.getDescription().isEmpty()) {
             throw new ValidateException("Описание не должно быть пустым," +
                     " максимальная длина описания не должна превышать 200 символов");
         }
 
-        if (film.getReleaseDate().isBefore(LocalDate.of(1895, Month.DECEMBER, 28))) {
+        if (film.getReleaseDate()==null || film.getReleaseDate().isBefore(LocalDate.of(1895, Month.DECEMBER, 28))) {
             throw new ValidateException("Дата релиза не может быть ранее 28.12.1895 и не может быть пустым");
         }
 
