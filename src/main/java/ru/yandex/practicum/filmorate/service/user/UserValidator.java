@@ -1,24 +1,27 @@
-package ru.yandex.practicum.filmorate.validator;
+package ru.yandex.practicum.filmorate.service.user;
 
-import ru.yandex.practicum.filmorate.controller.UserController;
+import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.EntityValidator;
+import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 
 import java.time.LocalDate;
 
-public class UserValidator implements Validator<User> {
+@Service
+public class UserValidator implements EntityValidator<User> {
     @Override
     public void validate(User user) throws ValidateException {
         if (user.getEmail()==null || user.getEmail().isBlank() || !user.getEmail().contains("@")) {
-            throw new ValidateException("Почта должна содержать символ \"@\" и не должна быть пустой");
+            throw new ValidateException("The mail must contain the \"@\" character and must not be empty");
         }
 
         if (user.getLogin()==null || user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            throw new ValidateException("Логин не может быть пустым или содержать пробел");
+            throw new ValidateException("The login cannot be empty or contain a space");
         }
 
         if (user.getBirthday()==null || user.getBirthday().isAfter(LocalDate.now())) {
-            throw new ValidateException("День рождения не может быть в будущем");
+            throw new ValidateException("Birthday can't be in the future");
         }
 
         if (user.getName()==null || user.getName().isEmpty()) {
@@ -26,7 +29,7 @@ public class UserValidator implements Validator<User> {
         }
 
         if (user.getId() == 0) {
-            user.setId(UserController.generateId());
+            user.setId(InMemoryUserStorage.generateId());
         }
     }
 }
