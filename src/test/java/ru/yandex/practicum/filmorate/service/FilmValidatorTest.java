@@ -35,7 +35,7 @@ class FilmValidatorTest {
     void validateWithoutName() {
         film.setName("");
         ValidateException exception = assertThrows(ValidateException.class, () -> validator.validate(film));
-        assertEquals("Имя не должно быть пустым", exception.getMessage());
+        assertEquals("The name should not be empty", exception.getMessage());
     }
 
     @Test
@@ -43,8 +43,8 @@ class FilmValidatorTest {
         String s = "a".repeat(201);
         film.setDescription(s);
         ValidateException exception = assertThrows(ValidateException.class, () -> validator.validate(film));
-        assertEquals("Описание не должно быть пустым," +
-                " максимальная длина описания не должна превышать 200 символов", exception.getMessage());
+        assertEquals("The description should not be empty," +
+                " the maximum length of the description should not exceed 200 characters", exception.getMessage());
     }
 
     @Test
@@ -53,13 +53,13 @@ class FilmValidatorTest {
 
         film.setReleaseDate(minReleaseDate.minusDays(1));
         ValidateException exception = assertThrows(ValidateException.class, () -> validator.validate(film));
-        assertEquals("Дата релиза не может быть ранее 28.12.1895 и не может быть пустым", exception.getMessage());
+        assertEquals("The release date cannot be earlier than 12/28/1895 and cannot be empty", exception.getMessage());
     }
 
     @Test
     void validateDuration() {
         film.setDuration(-1);
         ValidateException exception = assertThrows(ValidateException.class, () -> validator.validate(film));
-        assertEquals("Продолжительность фильма должна быть больше 0", exception.getMessage());
+        assertEquals("The duration of the movie must be greater than 0", exception.getMessage());
     }
 }

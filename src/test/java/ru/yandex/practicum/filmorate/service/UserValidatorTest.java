@@ -38,28 +38,28 @@ class UserValidatorTest {
     void validateMail() {
         user.setEmail("");
         ValidateException ex = assertThrows(ValidateException.class, () -> validator.validate(user));
-        assertEquals("Почта должна содержать символ \"@\" и не должна быть пустой", ex.getMessage());
+        assertEquals("The mail must contain the \"@\" character and must not be empty", ex.getMessage());
 
         user.setEmail("email.ru");
         ValidateException ex2 = assertThrows(ValidateException.class, () -> validator.validate(user));
-        assertEquals("Почта должна содержать символ \"@\" и не должна быть пустой", ex2.getMessage());
+        assertEquals("The mail must contain the \"@\" character and must not be empty", ex2.getMessage());
     }
 
     @Test
     void validateLogin() {
         user.setLogin("");
         ValidateException ex = assertThrows(ValidateException.class, () -> validator.validate(user));
-        assertEquals("Логин не может быть пустым или содержать пробел", ex.getMessage());
+        assertEquals("The login cannot be empty or contain a space", ex.getMessage());
 
         user.setLogin("log in");
         ValidateException ex2 = assertThrows(ValidateException.class, () -> validator.validate(user));
-        assertEquals("Логин не может быть пустым или содержать пробел", ex2.getMessage());
+        assertEquals("The login cannot be empty or contain a space", ex2.getMessage());
     }
 
     @Test
     void validateBirthday() {
         user.setBirthday(LocalDate.MAX);
         ValidateException ex = assertThrows(ValidateException.class, () -> validator.validate(user));
-        assertEquals("День рождения не может быть в будущем", ex.getMessage());
+        assertEquals("Birthday can't be in the future", ex.getMessage());
     }
 }
