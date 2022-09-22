@@ -6,10 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.EntityValidator;
 import ru.yandex.practicum.filmorate.service.film.FilmService;
-import ru.yandex.practicum.filmorate.service.film.FilmValidator;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import java.util.List;
 import java.util.Set;
@@ -17,25 +14,21 @@ import java.util.Set;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private final FilmStorage filmStorage;
     private final FilmService filmService;
-    private final EntityValidator<Film> validator;
 
     @Autowired
-    public FilmController(FilmStorage filmStorage, FilmService filmService, FilmValidator validator) {
-        this.filmStorage = filmStorage;
+    public FilmController(FilmService filmService) {
         this.filmService = filmService;
-        this.validator = validator;
     }
 
     @GetMapping("/{id}")
     public Film findById(@PathVariable Long id) throws NotFoundException {
-        return filmStorage.getFilmById(id);
+        return filmService.getFilmStorage().getFilmById(id);
     }
 
     @GetMapping()
     public List<Film> findAllFilms() {
-        return filmStorage.findAllFilms();
+        return filmService.getFilmStorage().findAllFilms();
     }
 
     @GetMapping("/popular")
@@ -45,14 +38,14 @@ public class FilmController {
 
     @PostMapping()
     public Film create(@RequestBody Film film) throws ValidateException {
-        validator.validate(film);
-        return filmStorage.create(film);
+        filmService.getValidator().validate(film);
+        return filmService.getFilmStorage().create(film);
     }
 
     @PutMapping()
     public Film update(@RequestBody Film film) throws ValidateException, NotFoundException {
-        validator.validate(film);
-        return filmStorage.update(film);
+        filmService.getValidator().validate(film);
+        return filmService.getFilmStorage().update(film);
     }
 
     @PutMapping("{id}/like/{userId}")

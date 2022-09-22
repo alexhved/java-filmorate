@@ -5,30 +5,23 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.EntityValidator;
 import ru.yandex.practicum.filmorate.service.user.UserService;
-import ru.yandex.practicum.filmorate.service.user.UserValidator;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final UserStorage userStorage;
     private final UserService userService;
-    private final EntityValidator<User> validator;
 
     @Autowired
-    public UserController(UserStorage userStorage, UserValidator validator, UserService userService) {
-        this.userStorage = userStorage;
-        this.validator = validator;
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/{id}")
     public User findUserById(@PathVariable Long id) throws NotFoundException {
-        return userStorage.getUserById(id);
+        return userService.getUserStorage().getUserById(id);
     }
 
     @GetMapping("/{id}/friends")
@@ -43,19 +36,19 @@ public class UserController {
 
     @GetMapping
     public List<User> findAllUsers() {
-        return userStorage.findAllUsers();
+        return userService.getUserStorage().findAllUsers();
     }
 
     @PostMapping
     public User create(@RequestBody User user) throws ValidateException {
-        validator.validate(user);
-        return userStorage.create(user);
+        userService.getValidator().validate(user);
+        return userService.getUserStorage().create(user);
     }
 
     @PutMapping
     public User update(@RequestBody User user) throws ValidateException, NotFoundException {
-        validator.validate(user);
-        return userStorage.update(user);
+        userService.getValidator().validate(user);
+        return userService.getUserStorage().update(user);
     }
 
     @PutMapping("{id}/friends/{friendId}")

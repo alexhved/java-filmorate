@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.EntityValidator;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.List;
@@ -15,11 +16,22 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserService {
 
-    UserStorage userStorage;
+    private final UserStorage userStorage;
+
+    private final EntityValidator<User> validator;
 
     @Autowired
-    public UserService(UserStorage userStorage) {
+    public UserService(UserStorage userStorage, EntityValidator<User> validator) {
         this.userStorage = userStorage;
+        this.validator = validator;
+    }
+
+    public EntityValidator<User> getValidator() {
+        return validator;
+    }
+
+    public UserStorage getUserStorage() {
+        return userStorage;
     }
 
     public String addFriend(Long id, Long friendId) throws NotFoundException {
@@ -49,7 +61,7 @@ public class UserService {
             throw new NotFoundException(String.format("User with id %s not found", id));
         }
         if (otherUser == null) {
-            throw new NotFoundException(String.format("Пользователь с id %s не найден", friendId));
+            throw new NotFoundException(String.format("User with id %s not found", friendId));
         }
         if (!user.getFriends().contains(otherUser.getId()) || !otherUser.getFriends().contains(user.getId())) {
             throw new NotFoundException("Not found among your friends");
