@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.EntityValidator;
-import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 
 import java.time.LocalDate;
 
@@ -29,7 +28,7 @@ public class UserValidator implements EntityValidator<User> {
         }
 
         if (user.getId() == 0) {
-            user.setId(InMemoryUserStorage.generateId());
+            user.setId(UserService.generateId());
         }
     }
 }

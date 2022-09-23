@@ -13,11 +13,6 @@ import java.util.Map;
 @Component
 @Slf4j
 public class InMemoryFilmStorage implements FilmStorage {
-    private static long idGenerator = 0;
-
-    public static long generateId() {
-        return ++idGenerator;
-    }
 
     private final Map<Long, Film> filmMap = new HashMap<>();
 

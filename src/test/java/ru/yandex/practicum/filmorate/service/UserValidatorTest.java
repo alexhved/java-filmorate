@@ -4,8 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.user.UserService;
 import ru.yandex.practicum.filmorate.service.user.UserValidator;
-import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -19,7 +19,7 @@ class UserValidatorTest {
     @BeforeEach
     void setUp() {
         user = new User();
-        InMemoryUserStorage.generateId();
+        UserService.generateId();
         user.setName("name nick");
         user.setLogin("login");
         user.setEmail("email@.con");

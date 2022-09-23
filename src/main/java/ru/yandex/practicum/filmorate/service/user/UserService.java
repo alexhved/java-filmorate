@@ -21,10 +21,16 @@ public class UserService {
 
     private final EntityValidator<User> validator;
 
+    private static long idGenerator = 0;
+
     @Autowired
     public UserService(UserStorage userStorage, EntityValidator<User> validator) {
         this.userStorage = userStorage;
         this.validator = validator;
+    }
+
+    public static long generateId() {
+        return ++idGenerator;
     }
     
     public String addFriend(Long id, Long friendId) throws NotFoundException {

@@ -22,11 +22,17 @@ public class FilmService {
     private final UserStorage userStorage;
     private final EntityValidator<Film> validator;
 
+    private static long idGenerator = 0;
+
     @Autowired
     public FilmService(FilmStorage filmStorage, UserStorage userStorage, EntityValidator<Film> validator) {
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
         this.validator = validator;
+    }
+
+    public static long generateId() {
+        return ++idGenerator;
     }
 
     public Set<Long> addLike(Long filmId, Long userId) throws NotFoundException {

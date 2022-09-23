@@ -4,8 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.film.FilmService;
 import ru.yandex.practicum.filmorate.service.film.FilmValidator;
-import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -19,7 +19,7 @@ class FilmValidatorTest {
     @BeforeEach
     public void setUp() {
         film = new Film();
-        film.setId(InMemoryFilmStorage.generateId());
+        film.setId(FilmService.generateId());
         film.setName("film name");
         film.setDescription("description");
         film.setDuration(90);

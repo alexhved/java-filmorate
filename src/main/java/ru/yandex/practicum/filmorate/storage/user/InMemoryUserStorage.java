@@ -14,13 +14,7 @@ import java.util.Map;
 @Slf4j
 public class InMemoryUserStorage implements UserStorage {
 
-    private static long idGenerator = 0;
-
     private final Map<Long, User> userMap = new HashMap<>();
-
-    public static long generateId() {
-        return ++idGenerator;
-    }
 
     @Override
     public Map<Long, User> getUserMap() {
