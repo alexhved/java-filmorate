@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.EntityValidator;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
@@ -25,15 +26,7 @@ public class UserService {
         this.userStorage = userStorage;
         this.validator = validator;
     }
-
-    public EntityValidator<User> getValidator() {
-        return validator;
-    }
-
-    public UserStorage getUserStorage() {
-        return userStorage;
-    }
-
+    
     public String addFriend(Long id, Long friendId) throws NotFoundException {
         User user = userStorage.getUserById(id);
         User otherUser = userStorage.getUserById(friendId);
@@ -113,6 +106,24 @@ public class UserService {
                     }
                 })
                 .collect(Collectors.toList());
+    }
+
+    public User getUserById(Long id) throws NotFoundException {
+        return userStorage.getUserById(id);
+    }
+
+    public List<User> findAllUsers() {
+        return userStorage.findAllUsers();
+    }
+
+    public User create(User user) throws ValidateException {
+        validator.validate(user);
+        return userStorage.create(user);
+    }
+
+    public User update(User user) throws NotFoundException, ValidateException {
+        validator.validate(user);
+        return userStorage.update(user);
     }
 }
 

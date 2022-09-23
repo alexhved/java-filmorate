@@ -23,12 +23,12 @@ public class FilmController {
 
     @GetMapping("/{id}")
     public Film findById(@PathVariable Long id) throws NotFoundException {
-        return filmService.getFilmStorage().getFilmById(id);
+        return filmService.getFilmById(id);
     }
 
     @GetMapping()
     public List<Film> findAllFilms() {
-        return filmService.getFilmStorage().findAllFilms();
+        return filmService.findAllFilms();
     }
 
     @GetMapping("/popular")
@@ -38,14 +38,12 @@ public class FilmController {
 
     @PostMapping()
     public Film create(@RequestBody Film film) throws ValidateException {
-        filmService.getValidator().validate(film);
-        return filmService.getFilmStorage().create(film);
+        return filmService.create(film);
     }
 
     @PutMapping()
     public Film update(@RequestBody Film film) throws ValidateException, NotFoundException {
-        filmService.getValidator().validate(film);
-        return filmService.getFilmStorage().update(film);
+        return filmService.update(film);
     }
 
     @PutMapping("{id}/like/{userId}")

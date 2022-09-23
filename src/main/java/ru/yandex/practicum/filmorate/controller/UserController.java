@@ -21,7 +21,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User findUserById(@PathVariable Long id) throws NotFoundException {
-        return userService.getUserStorage().getUserById(id);
+        return userService.getUserById(id);
     }
 
     @GetMapping("/{id}/friends")
@@ -36,19 +36,17 @@ public class UserController {
 
     @GetMapping
     public List<User> findAllUsers() {
-        return userService.getUserStorage().findAllUsers();
+        return userService.findAllUsers();
     }
 
     @PostMapping
     public User create(@RequestBody User user) throws ValidateException {
-        userService.getValidator().validate(user);
-        return userService.getUserStorage().create(user);
+        return userService.create(user);
     }
 
     @PutMapping
     public User update(@RequestBody User user) throws ValidateException, NotFoundException {
-        userService.getValidator().validate(user);
-        return userService.getUserStorage().update(user);
+        return userService.update(user);
     }
 
     @PutMapping("{id}/friends/{friendId}")

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.EntityValidator;
@@ -19,7 +20,6 @@ import java.util.stream.Collectors;
 public class FilmService {
     private final FilmStorage filmStorage;
     private final UserStorage userStorage;
-
     private final EntityValidator<Film> validator;
 
     @Autowired
@@ -27,14 +27,6 @@ public class FilmService {
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
         this.validator = validator;
-    }
-
-    public EntityValidator<Film> getValidator() {
-        return validator;
-    }
-
-    public FilmStorage getFilmStorage() {
-        return filmStorage;
     }
 
     public Set<Long> addLike(Long filmId, Long userId) throws NotFoundException {
@@ -74,5 +66,23 @@ public class FilmService {
                 .collect(Collectors.toList());
 
         return films;
+    }
+
+    public Film getFilmById(Long id) throws NotFoundException {
+        return filmStorage.getFilmById(id);
+    }
+
+    public Film create(Film film) throws ValidateException {
+        validator.validate(film);
+        return filmStorage.create(film);
+    }
+
+    public List<Film> findAllFilms() {
+        return filmStorage.findAllFilms();
+    }
+
+    public Film update(Film film) throws NotFoundException, ValidateException {
+        validator.validate(film);
+        return filmStorage.update(film);
     }
 }
