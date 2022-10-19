@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidateException;
@@ -24,7 +25,7 @@ public class UserService {
     private static long idGenerator = 0;
 
     @Autowired
-    public UserService(UserStorage userStorage, EntityValidator<User> validator) {
+    public UserService(@Qualifier("userDbStorage") UserStorage userStorage, EntityValidator<User> validator) {
         this.userStorage = userStorage;
         this.validator = validator;
     }
