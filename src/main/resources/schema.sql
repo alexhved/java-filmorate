@@ -5,7 +5,7 @@ create table if not exists users
     name      varchar(20) not null ,
     email     varchar(30) not null ,
     login     varchar(20) not null ,
-    birthdate date not null
+    birthday date not null
 );
 create table if not exists films
 (
