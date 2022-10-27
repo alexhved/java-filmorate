@@ -1,2 +1,2 @@
 # java-filmorate
-Template repository for Filmorate project.
+![filmorate-db-schema](https://github.com/alexhved/java-filmorate/blob/main/filmorate-diagram.png)
