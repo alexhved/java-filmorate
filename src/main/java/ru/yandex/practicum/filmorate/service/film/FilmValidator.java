@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.service.film;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import ru.yandex.practicum.filmorate.exception.ValidateException;
+import ru.yandex.practicum.filmorate.id_generator.IdGenerator;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.EntityValidator;
 
@@ -15,9 +16,6 @@ import java.time.Month;
 public class FilmValidator implements EntityValidator<Film> {
     @Override
     public void validate(@Valid Film film) throws ValidateException {
-        /*if (film.getName()==null || film.getName().isBlank()) {
-            throw new ValidateException("The name should not be empty");
-        }*/
 
         if (film.getDescription().chars().count() > 200) {
             throw new ValidateException("The description should not be empty," +
@@ -28,12 +26,8 @@ public class FilmValidator implements EntityValidator<Film> {
             throw new ValidateException("The release date cannot be earlier than 12/28/1895 and cannot be empty");
         }
 
-        /*if (film.getDuration() <= 0) {
-            throw new ValidateException("The duration of the movie must be greater than 0");
-        }*/
-
         if (film.getId() == 0) {
-            film.setId(FilmService.generateId());
+            film.setId(IdGenerator.generateIdForFilm());
         }
     }
 }

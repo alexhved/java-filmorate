@@ -37,7 +37,7 @@ public class FilmController {
     }
 
     @PostMapping()
-    public Film create(@RequestBody Film film) throws ValidateException {
+    public Film create(@RequestBody Film film) throws ValidateException, NotFoundException {
         return filmService.create(film);
     }
 
@@ -55,6 +55,4 @@ public class FilmController {
     public Set<Long> delLike(@PathVariable("id") Long filmId, @PathVariable("userId") Long userId) throws NotFoundException {
         return filmService.delLike(filmId, userId);
     }
-
-
 }

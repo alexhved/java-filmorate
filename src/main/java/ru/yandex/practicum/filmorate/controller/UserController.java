@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PostMapping
-    public User create(@RequestBody User user) throws ValidateException {
+    public User create(@RequestBody User user) throws ValidateException, NotFoundException {
         return userService.create(user);
     }
 

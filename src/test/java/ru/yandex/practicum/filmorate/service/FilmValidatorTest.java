@@ -3,8 +3,8 @@ package ru.yandex.practicum.filmorate.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.ValidateException;
+import ru.yandex.practicum.filmorate.id_generator.IdGenerator;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.film.FilmService;
 import ru.yandex.practicum.filmorate.service.film.FilmValidator;
 
 import java.time.LocalDate;
@@ -19,7 +19,7 @@ class FilmValidatorTest {
     @BeforeEach
     public void setUp() {
         film = new Film();
-        film.setId(FilmService.generateId());
+        film.setId(IdGenerator.generateIdForFilm());
         film.setName("film name");
         film.setDescription("description");
         film.setDuration(90);
@@ -29,13 +29,6 @@ class FilmValidatorTest {
     @Test
     void validate() {
         assertDoesNotThrow(() -> validator.validate(film));
-    }
-
-    @Test
-    void validateWithoutName() {
-        film.setName("");
-        ValidateException exception = assertThrows(ValidateException.class, () -> validator.validate(film));
-        assertEquals("The name should not be empty", exception.getMessage());
     }
 
     @Test
@@ -54,12 +47,5 @@ class FilmValidatorTest {
         film.setReleaseDate(minReleaseDate.minusDays(1));
         ValidateException exception = assertThrows(ValidateException.class, () -> validator.validate(film));
         assertEquals("The release date cannot be earlier than 12/28/1895 and cannot be empty", exception.getMessage());
-    }
-
-    @Test
-    void validateDuration() {
-        film.setDuration(-1);
-        ValidateException exception = assertThrows(ValidateException.class, () -> validator.validate(film));
-        assertEquals("The duration of the movie must be greater than 0", exception.getMessage());
     }
 }
