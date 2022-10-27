@@ -127,17 +127,15 @@ public class FilmDbStorage implements FilmDb {
     }
 
     @Override
-    public int addLike(Long filmId, Long userId) {
+    public void addLike(Long filmId, Long userId) {
         String sql = "insert into LIKES_USERS (FILM_ID, USER_ID) values (?, ?)";
-        int update = jdbcTemplate.update(sql, filmId, userId);
-        return update;
+        jdbcTemplate.update(sql, filmId, userId);
     }
 
     @Override
-    public int removeLike(Long filmId, Long userId) {
+    public void removeLike(Long filmId, Long userId) {
         String sql = "delete from LIKES_USERS where FILM_ID = ? and USER_ID = ?";
-        int update = jdbcTemplate.update(sql, filmId, userId);
-        return update;
+        jdbcTemplate.update(sql, filmId, userId);
     }
 
     @Override

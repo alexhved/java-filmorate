@@ -30,27 +30,24 @@ public class UserDbStorage implements UserDb {
     }
 
     @Override
-    public String addFriend(Long id, Long friendId) {
+    public void addFriend(Long id, Long friendId) {
         String sql ="insert into FRIENDS values (?, ?)";
         jdbcTemplate.update(sql, id, friendId);
         log.info("user with id {} want add user with id {} to friends", id, friendId);
-        return String.format("user with id %s want add user with id %s to friends", id, friendId);
     }
 
     @Override
-    public String deleteFriend(long id, long friendId) {
+    public void deleteFriend(long id, long friendId) {
         String sql = "delete from FRIENDS where USER_ID = ? and FRIEND_ID = ?";
         jdbcTemplate.update(sql, id, friendId);
         log.info("user with id {} delete user with id {} from friends", id, friendId);
-        return String.format("user with id %s delete user with id %s from friends", id, friendId);
     }
 
     @Override
-    public String addApprovedFriend(Long id, Long friendId) {
+    public void addApprovedFriend(Long id, Long friendId) {
         String sql ="insert into APPROVED_FRIENDS values (?, ?)";
         jdbcTemplate.update(sql, id, friendId);
         log.info("user with id {} add user with id {} to friends", id, friendId);
-        return String.format("user with id %s add user with id %s to friends", id, friendId);
     }
 
     @Override

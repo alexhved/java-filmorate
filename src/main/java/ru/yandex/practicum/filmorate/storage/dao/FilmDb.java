@@ -8,8 +8,8 @@ import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import java.util.List;
 
 public interface FilmDb extends FilmStorage {
-    int addLike(Long filmId, Long userId);
-    int removeLike(Long filmId, Long userId);
+    void addLike(Long filmId, Long userId);
+    void removeLike(Long filmId, Long userId);
 
     List<Mpa> findAllMpa();
 
