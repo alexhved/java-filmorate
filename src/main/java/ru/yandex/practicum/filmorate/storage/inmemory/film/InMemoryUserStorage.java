@@ -1,14 +1,12 @@
-package ru.yandex.practicum.filmorate.storage.user;
+package ru.yandex.practicum.filmorate.storage.inmemory.film;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @Slf4j
@@ -17,37 +15,29 @@ public class InMemoryUserStorage implements UserStorage {
     private final Map<Long, User> userMap = new HashMap<>();
 
     @Override
-    public Map<Long, User> getUserMap() {
-        return userMap;
-    }
-
-    @Override
     public List<User> findAllUsers() {
         return new ArrayList<>(userMap.values());
     }
 
     @Override
-    public User create(User user) {
+    public Optional<User> create(User user) {
         userMap.put(user.getId(), user);
         log.info("User added: {}", user.getName());
-        return user;
+        return Optional.of(user);
     }
 
     @Override
-    public User update(User user) throws NotFoundException {
+    public Optional<User> update(User user) throws NotFoundException {
         if (!userMap.containsKey(user.getId())) {
             throw new NotFoundException("User not found");
         }
         userMap.put(user.getId(), user);
         log.info("User updated: {}", user.getName());
-        return user;
+        return Optional.of(user);
     }
 
     @Override
-    public User getUserById(Long id) throws NotFoundException {
-        if (!userMap.containsKey(id)) {
-            throw new NotFoundException(String.format("User with id %s not found", id));
-        }
-        return userMap.get(id);
+    public Optional<User> getUserById(Long id) {
+        return Optional.ofNullable(userMap.get(id));
     }
 }

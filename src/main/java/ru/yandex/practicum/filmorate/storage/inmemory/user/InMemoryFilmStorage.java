@@ -1,14 +1,12 @@
-package ru.yandex.practicum.filmorate.storage.film;
+package ru.yandex.practicum.filmorate.storage.inmemory.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @Slf4j
@@ -22,27 +20,27 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film create(Film film) {
+    public Optional<Film> create(Film film) {
         filmMap.put(film.getId(), film);
         log.info("New film added: {}", film.getName());
-        return film;
+        return Optional.of(film);
     }
 
     @Override
-    public Film update(Film film) throws NotFoundException {
+    public Optional<Film> update(Film film) throws NotFoundException {
         if (!filmMap.containsKey(film.getId())) {
             throw new NotFoundException("Film not found");
         }
         filmMap.put(film.getId(), film);
         log.info("Film updated: {}", film.getName());
-        return film;
+        return Optional.of(film);
     }
 
     @Override
-    public Film getFilmById(Long filmId) throws NotFoundException {
+    public Optional<Film> getFilmById(Long filmId) throws NotFoundException {
         if (!filmMap.containsKey(filmId)) {
             throw new NotFoundException("Film not found");
         }
-        return filmMap.get(filmId);
+        return Optional.ofNullable(filmMap.get(filmId));
     }
 }

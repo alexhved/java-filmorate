@@ -9,13 +9,16 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.ErrorResponse;
 
+import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
+
 @RestControllerAdvice
 @Slf4j
 public class ErrorHandler {
 
-    @ExceptionHandler(ValidateException.class)
+    @ExceptionHandler({ConstraintViolationException.class, ValidateException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse ValidateHandler(final ValidateException e) {
+    public ErrorResponse ValidateHandler(final ValidationException e) {
         log.warn(e.getMessage());
         return new ErrorResponse(e.getMessage());
     }

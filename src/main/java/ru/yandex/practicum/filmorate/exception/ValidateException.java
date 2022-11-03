@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.exception;
 
-public class ValidateException extends Exception {
+import javax.validation.ValidationException;
+
+public class ValidateException extends ValidationException {
     public ValidateException(String s) {
         super(s);
     }
