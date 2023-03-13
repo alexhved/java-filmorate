@@ -1,4 +1,3 @@
-# java-filmorate
 ### A small social network for movie lovers.
 ---
 [Database schema](https://github.com/alexhved/java-filmorate/blob/main/schema.sql)
